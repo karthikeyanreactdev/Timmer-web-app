@@ -111,12 +111,12 @@ function Report() {
         sortable: true,
         width: 220,
         cellRenderer(params) {
-          const date = new Date(params.data.startdate).toLocaleDateString('de-DE', {
-            year: 'numeric',
-            day: '2-digit',
-            month: '2-digit'
-          });
-          return date; // params.data.createdTime;
+          // const date = new Date(params.data.startdate).toLocaleDateString('-DE', {
+          //   year: 'numeric',
+          //   day: '2-digit',
+          //   month: '2-digit'
+          // });
+          return moment(params.data.startdate).format('DD-MMMM-YYYY'); // params.data.createdTime;
         }
         // comparator: this.customComparator1
       }
@@ -217,14 +217,14 @@ const   exportexcel = () => {
   worksheet.getCell('A3').alignment = { horizontal: 'left' };
   worksheet.getCell('A3').font = { bold: true, name: 'Roboto', size: 10 };
 
-  worksheet.getCell('B3').value = moment().format('MM/DD/YYYY');
+  worksheet.getCell('B3').value = moment(startDate).format('MM/DD/YYYY');
   worksheet.getCell('B3').alignment = { vertical: 'bottom', horizontal: 'left' };
 
   worksheet.getCell('A4').value = 'To-Date ';
   worksheet.getCell('A4').alignment = { horizontal: 'left' };
   worksheet.getCell('A4').font = { bold: true, name: 'Roboto', size: 10 };
 
-  worksheet.getCell('B4').value = moment().format('MM/DD/YYYY');
+  worksheet.getCell('B4').value = moment(endDate).format('MM/DD/YYYY');
   worksheet.getCell('B4').alignment = { vertical: 'bottom', horizontal: 'left' };
 
   // worksheet.getCell('A4').value = 'Total Orders & Expenses ';
@@ -234,26 +234,26 @@ const   exportexcel = () => {
   // worksheet.getCell('B4').value ='abd'
   // worksheet.getCell('B4').alignment = { vertical: 'bottom', horizontal: 'left' };
 
-   worksheet.getCell('A5').value = 'User';
+  //  worksheet.getCell('A5').value = 'User';
+  // worksheet.getCell('A5').alignment = { horizontal: 'left' };
+  // worksheet.getCell('A5').font = { bold: true, name: 'Roboto', size: 10 };
+
+  // worksheet.getCell('B5').value ='karthik'
+  // worksheet.getCell('B5').alignment = { vertical: 'bottom', horizontal: 'left' };
+
+  // worksheet.getCell('A6').value = 'Machine';
+  // worksheet.getCell('A6').alignment = { horizontal: 'left' };
+  // worksheet.getCell('A6').font = { bold: true, name: 'Roboto', size: 10 };
+
+  // worksheet.getCell('B6').value ='Machine 1'
+  // worksheet.getCell('B6').alignment = { vertical: 'bottom', horizontal: 'left' };
+
+  worksheet.getCell('A5').value = 'Created on';
   worksheet.getCell('A5').alignment = { horizontal: 'left' };
   worksheet.getCell('A5').font = { bold: true, name: 'Roboto', size: 10 };
 
-  worksheet.getCell('B5').value ='karthik'
+  worksheet.getCell('B5').value = moment().format('MM/DD/YYYY h:mm:ss A ');
   worksheet.getCell('B5').alignment = { vertical: 'bottom', horizontal: 'left' };
-
-  worksheet.getCell('A6').value = 'Machine';
-  worksheet.getCell('A6').alignment = { horizontal: 'left' };
-  worksheet.getCell('A6').font = { bold: true, name: 'Roboto', size: 10 };
-
-  worksheet.getCell('B6').value ='Machine 1'
-  worksheet.getCell('B6').alignment = { vertical: 'bottom', horizontal: 'left' };
-
-  worksheet.getCell('A7').value = 'Created on';
-  worksheet.getCell('A7').alignment = { horizontal: 'left' };
-  worksheet.getCell('A7').font = { bold: true, name: 'Roboto', size: 10 };
-
-  worksheet.getCell('B7').value = moment().format('MM/DD/YYYY h:mm:ss A ');
-  worksheet.getCell('B7').alignment = { vertical: 'bottom', horizontal: 'left' };
   // worksheet.addRow({"":''})
   worksheet.getRow(9).values = ['User Name', 'User Mobile', 'Machine Name', 'Machine Mobile','Cost/Hour', 'Time(minutes)', 'Total Amount', 'Status', 'Start Date' ];
   worksheet.columns.forEach(column => {
@@ -413,7 +413,7 @@ const GeneratePDF = () => {
              e.minutes,
              e.totalamount,
             e.paidstatus,
-            e.startdate 			
+            moment(e.startdate).format('MM/DD/YYYY') 			
 			
 			// called date-fns to format the date on the ticket
 			// format(new Date(ticket.updated_at), 'yyyy-MM-dd')
@@ -477,8 +477,8 @@ const GeneratePDF = () => {
 	 
 
 	// doc.addImage(`${process.env.PUBLIC_URL}/assets/images/logos/Epllogo.png`, 'png', 165, 3, 29, 7);
-	doc.text(`From-Date : ${startDate}`, 14, 10);
-	doc.text(`To-Date :  ${endDate}`, 14, 15);
+	doc.text(`From-Date : ${moment(startDate).format('MM/DD/YYYY')}`, 14, 10);
+	doc.text(`To-Date :  ${moment(endDate).format('MM/DD/YYYY')}`, 14, 15);
 			// doc.text(`User Name : ${firstname}`, 14, 20);
 			// doc.text(`Machine Name : ${machinename}`, 14, 25);
 		doc.text(`Created on : ${moment().format('MM/DD/YYYY h:mm:ss A ')}`, 14, 20);
